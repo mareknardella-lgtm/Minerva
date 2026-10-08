@@ -6,11 +6,8 @@ import {
   Layers, 
   Grid3X3, 
   Pause,
-  ChevronRight,
-  Sparkles,
   Info
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 export default function InteractiveLabs() {
   const [activeLab, setActiveLab] = useState('perceptron'); // 'perceptron' | 'attention' | 'vision'
@@ -77,7 +74,6 @@ export default function InteractiveLabs() {
     const width = canvas.width;
     const height = canvas.height;
 
-    // Crisp high-DPI rendering
     ctx.clearRect(0, 0, width, height);
 
     // Subtle coordinate grid
@@ -251,40 +247,40 @@ export default function InteractiveLabs() {
 
   const KERNELS = {
     'sobel-h': {
-      name: 'Sobel Horizontal (Bordi Orizzontali)',
+      name: 'Sobel Horizontal (Horizontal Edges)',
       matrix: [
         [-1, -2, -1],
         [ 0,  0,  0],
         [ 1,  2,  1]
       ],
-      desc: 'Estrae gradienti d\'intensità verticale evidenziando i margini orizzontali.'
+      desc: 'Computes vertical brightness gradients to highlight horizontal boundaries.'
     },
     'sobel-v': {
-      name: 'Sobel Vertical (Bordi Verticali)',
+      name: 'Sobel Vertical (Vertical Edges)',
       matrix: [
         [-1, 0, 1],
         [-2, 0, 2],
         [-1, 0, 1]
       ],
-      desc: 'Estrae gradienti d\'intensità orizzontale evidenziando contorni e linee verticali.'
+      desc: 'Computes horizontal brightness gradients to highlight vertical contours and lines.'
     },
     'sharpen': {
-      name: 'Sharpening (Enfasi Contrasto)',
+      name: 'Sharpening (Contrast Emphasis)',
       matrix: [
         [ 0, -1,  0],
         [-1,  5, -1],
         [ 0, -1,  0]
       ],
-      desc: 'Amplifica le alte frequenze spaziali e i passaggi netti di luminosità.'
+      desc: 'Amplifies high spatial frequencies and sharp brightness transitions.'
     },
     'blur': {
-      name: 'Gaussian Approximation (Smoothing)',
+      name: 'Gaussian Smoothing (Noise Filter)',
       matrix: [
         [0.11, 0.11, 0.11],
         [0.11, 0.11, 0.11],
         [0.11, 0.11, 0.11]
       ],
-      desc: 'Filtro passa-basso per l\'attenuazione del rumore pixel ad alta frequenza.'
+      desc: 'Low-pass spatial filter that averages neighboring pixels to reduce noise.'
     }
   };
 
@@ -345,14 +341,14 @@ export default function InteractiveLabs() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 pb-3 border-b border-white/[0.06]">
           <div>
             <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block">
-              Ambiente di Esecuzione Locale
+              Client-Side Runtime Environment
             </span>
             <h1 className="text-xl font-bold tracking-tight text-zinc-100 font-['Outfit']">
-              Laboratori Algoritmici Interattivi
+              Interactive Algorithmic Laboratories
             </h1>
           </div>
           <span className="text-[11px] text-zinc-500 font-mono">
-            Zero latenza cloud · Esecuzione WebAssembly & Canvas
+            Zero cloud latency · In-browser WebAssembly & Canvas runtime
           </span>
         </div>
 
@@ -367,10 +363,10 @@ export default function InteractiveLabs() {
           >
             <div className="flex items-center gap-2 mb-1">
               <BrainCircuit className="w-3.5 h-3.5 text-indigo-400" />
-              <span className="text-xs font-semibold">1. Perceptron 2D</span>
+              <span className="text-xs font-semibold">1. 2D Perceptron</span>
             </div>
             <p className="text-[11px] text-zinc-500 line-clamp-1">
-              Iperpiano di separazione e convergenza loss.
+              Hyperplane decision boundary & loss convergence.
             </p>
           </button>
 
@@ -387,7 +383,7 @@ export default function InteractiveLabs() {
               <span className="text-xs font-semibold">2. Transformer Attention</span>
             </div>
             <p className="text-[11px] text-zinc-500 line-clamp-1">
-              Pesi di auto-attenzione e analisi di valenza semantica.
+              Self-attention weight matrix & semantic valence.
             </p>
           </button>
 
@@ -401,10 +397,10 @@ export default function InteractiveLabs() {
           >
             <div className="flex items-center gap-2 mb-1">
               <Grid3X3 className="w-3.5 h-3.5 text-teal-400" />
-              <span className="text-xs font-semibold">3. Kernel Convoluzionali</span>
+              <span className="text-xs font-semibold">3. Convolution Kernels</span>
             </div>
             <p className="text-[11px] text-zinc-500 line-clamp-1">
-              Filtri 3x3 spaziali e feature map tensoriale.
+              3x3 spatial filter kernels & feature tensor.
             </p>
           </button>
         </div>
@@ -420,7 +416,7 @@ export default function InteractiveLabs() {
           <div className="lg:col-span-7 ui-panel p-5 flex flex-col items-center">
             <div className="w-full flex items-center justify-between mb-3 text-xs">
               <span className="text-zinc-300 font-medium">
-                Piano Feature 2D <span className="text-zinc-500 font-mono text-[11px]">(Click per campionare)</span>
+                2D Feature Plane <span className="text-zinc-500 font-mono text-[11px]">(Click to add points)</span>
               </span>
 
               <div className="flex items-center gap-1.5 p-0.5 rounded-lg bg-zinc-900 border border-white/[0.06]">
@@ -432,7 +428,7 @@ export default function InteractiveLabs() {
                       : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
-                  Classe 0 (Sky)
+                  Class 0 (Sky)
                 </button>
                 <button
                   onClick={() => setCurrentClass(1)}
@@ -442,7 +438,7 @@ export default function InteractiveLabs() {
                       : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
-                  Classe 1 (Rose)
+                  Class 1 (Rose)
                 </button>
               </div>
             </div>
@@ -473,7 +469,7 @@ export default function InteractiveLabs() {
                 onClick={() => setPoints([])}
                 className="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer"
               >
-                Pulisci
+                Clear
               </button>
             </div>
           </div>
@@ -484,12 +480,12 @@ export default function InteractiveLabs() {
             {/* Real-time Metrics */}
             <div className="ui-panel p-5">
               <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-3">
-                Diagnostica del Modello
+                Model Diagnostics
               </div>
 
               <div className="grid grid-cols-3 gap-2">
                 <div className="p-3 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-center">
-                  <span className="text-[10px] text-zinc-500 block uppercase font-mono">Accuratezza</span>
+                  <span className="text-[10px] text-zinc-500 block uppercase font-mono">Accuracy</span>
                   <span className="text-xl font-bold font-mono text-zinc-100">
                     {accuracy}%
                   </span>
@@ -501,7 +497,7 @@ export default function InteractiveLabs() {
                   </span>
                 </div>
                 <div className="p-3 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-center">
-                  <span className="text-[10px] text-zinc-500 block uppercase font-mono">Epoca</span>
+                  <span className="text-[10px] text-zinc-500 block uppercase font-mono">Epoch</span>
                   <span className="text-xl font-bold font-mono text-indigo-400">
                     {epoch}
                   </span>
@@ -509,7 +505,7 @@ export default function InteractiveLabs() {
               </div>
 
               <div className="mt-3 p-3 rounded-lg bg-zinc-950 border border-white/[0.06] font-mono text-xs text-zinc-300">
-                <div className="text-zinc-500 text-[10px] uppercase mb-1">Stato Pesi Sinaptici:</div>
+                <div className="text-zinc-500 text-[10px] uppercase mb-1">Synaptic Weight State:</div>
                 <div>{weights.w1.toFixed(3)}·x₁ + {weights.w2.toFixed(3)}·x₂ + {weights.bias.toFixed(3)} = 0</div>
               </div>
             </div>
@@ -542,7 +538,7 @@ export default function InteractiveLabs() {
                   }`}
                 >
                   {isTraining ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
-                  <span>{isTraining ? 'Pausa Training' : 'Addestra Modello'}</span>
+                  <span>{isTraining ? 'Pause Training' : 'Train Perceptron'}</span>
                 </button>
 
                 <button
@@ -550,13 +546,13 @@ export default function InteractiveLabs() {
                   disabled={isTraining}
                   className="px-3 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 disabled:opacity-40 text-zinc-300 text-xs font-mono border border-white/[0.08] cursor-pointer"
                 >
-                  +1 Epoca
+                  +1 Epoch
                 </button>
 
                 <button
                   onClick={resetPerceptron}
                   className="p-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-white/[0.08] cursor-pointer"
-                  title="Reimposta pesi"
+                  title="Reset weights"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
@@ -566,7 +562,7 @@ export default function InteractiveLabs() {
             <div className="p-3.5 rounded-xl bg-zinc-900/50 border border-white/[0.06] text-xs text-zinc-400 flex items-start gap-2.5">
               <Info className="w-4 h-4 text-zinc-500 shrink-0 mt-0.5" />
               <p className="text-[11px] leading-relaxed">
-                Il confine decisionale ruota minimizzando l'errore per ciascun campione tramite la derivata prima della Binary Cross Entropy.
+                The decision hyperplane dynamically updates by computing gradients across misclassified samples via Binary Cross-Entropy loss.
               </p>
             </div>
 
@@ -582,7 +578,7 @@ export default function InteractiveLabs() {
         <div className="space-y-4">
           <div className="ui-panel p-5">
             <div className="text-xs font-medium text-zinc-300 mb-2">
-              Frase di Test per l'Inferenza Contestuale:
+              Input Sentence for Contextual Inference:
             </div>
             <div className="flex flex-col sm:flex-row gap-2">
               <input
@@ -615,10 +611,10 @@ export default function InteractiveLabs() {
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-semibold text-zinc-200">
-                    Pesi di Auto-Attenzione (Self-Attention Head)
+                    Self-Attention Weight Distribution (Head 1)
                   </h3>
                   <p className="text-[11px] text-zinc-500">
-                    Seleziona un token sorgente per calcolare la proiezione softmax sulle altre posizioni.
+                    Select any source token to inspect its contextual Softmax projection across other tokens.
                   </p>
                 </div>
                 <span className="text-[11px] font-mono text-sky-400 px-2 py-0.5 rounded bg-sky-500/10 border border-sky-500/20">
@@ -680,7 +676,7 @@ export default function InteractiveLabs() {
             <div className="lg:col-span-4 ui-panel p-5 flex flex-col justify-between text-center">
               <div>
                 <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 block mb-4">
-                  Valenza Semantica Stimata
+                  Estimated Semantic Valence
                 </span>
 
                 <div className="inline-flex flex-col items-center justify-center p-6 rounded-2xl bg-zinc-900/60 border border-white/[0.06] my-2">
@@ -690,13 +686,13 @@ export default function InteractiveLabs() {
                     {sentimentScore.toFixed(2)}
                   </span>
                   <span className="text-[10px] font-mono uppercase tracking-wider mt-1 text-zinc-500">
-                    {sentimentScore > 0.1 ? 'Orientamento Positivo' : sentimentScore < -0.1 ? 'Critico / Negativo' : 'Neutrale'}
+                    {sentimentScore > 0.1 ? 'Positive Polarity' : sentimentScore < -0.1 ? 'Critical / Negative' : 'Neutral'}
                   </span>
                 </div>
               </div>
 
               <p className="text-[11px] text-zinc-500 leading-normal mt-4">
-                Ponderazione degli embeddings contestuali per la classificazione di valenza affettiva.
+                Contextual embedding aggregation determining emotional valence and semantic alignment.
               </p>
             </div>
 
@@ -714,14 +710,14 @@ export default function InteractiveLabs() {
           <div className="lg:col-span-5 ui-panel p-5 flex flex-col items-center">
             <div className="w-full flex items-center justify-between mb-3 text-xs">
               <span className="text-zinc-300 font-medium">
-                Matrice Input (10x10)
+                Input Matrix (10x10)
               </span>
               <div className="flex gap-1">
                 <button
                   onClick={() => setPresetGrid('cross')}
                   className="px-2 py-0.5 rounded bg-zinc-900 text-[10px] font-mono text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
                 >
-                  Croce
+                  Cross
                 </button>
                 <button
                   onClick={() => setPresetGrid('box')}
@@ -756,7 +752,7 @@ export default function InteractiveLabs() {
               onClick={() => setPixelGrid(Array(GRID_SIZE).fill(0).map(() => Array(GRID_SIZE).fill(0)))}
               className="mt-3 text-[11px] text-zinc-500 hover:text-zinc-300 cursor-pointer font-mono"
             >
-              Azzera matrice
+              Clear Matrix
             </button>
           </div>
 
@@ -766,7 +762,7 @@ export default function InteractiveLabs() {
             {/* Filter Selector */}
             <div className="ui-panel p-5 space-y-3">
               <div className="text-xs font-medium text-zinc-300">
-                Seleziona Kernel di Convoluzione (3x3):
+                Select 3x3 Convolution Kernel:
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {Object.entries(KERNELS).map(([kKey, kVal]) => (
@@ -811,7 +807,7 @@ export default function InteractiveLabs() {
               {/* Feature Map */}
               <div className="flex-1 flex flex-col items-center">
                 <span className="text-[11px] font-mono text-zinc-400 block mb-1.5">
-                  Mappa Attivazione Risultante
+                  Computed Activation Feature Map
                 </span>
                 <div className="grid grid-cols-10 gap-1 p-2 bg-[#07080c] rounded-xl border border-white/[0.08]">
                   {featureMap.map((row, r) =>

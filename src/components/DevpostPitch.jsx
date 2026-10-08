@@ -129,7 +129,7 @@ ${submissionData.whatsNext}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3 pb-3 border-b border-white/[0.06]">
           <div>
             <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block">
-              Dossier Ufficiale di Candidatura
+              Official Hackathon Submission Dossier
             </span>
             <h1 className="text-xl font-bold tracking-tight text-zinc-100 font-['Outfit']">
               Devpost Pitch Submission
@@ -142,7 +142,7 @@ ${submissionData.whatsNext}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs transition-colors cursor-pointer"
             >
               {copiedSection === 'all' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedSection === 'all' ? 'Tutto Copiato' : 'Copia Tutto (.md)'}</span>
+              <span>{copiedSection === 'all' ? 'All Copied' : 'Copy Full Submission (.md)'}</span>
             </button>
 
             <button
@@ -150,7 +150,7 @@ ${submissionData.whatsNext}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 font-medium text-xs border border-white/[0.08] transition-colors cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>Scarica .md</span>
+              <span>Download .md</span>
             </button>
           </div>
         </div>
@@ -158,7 +158,7 @@ ${submissionData.whatsNext}
         {/* Team Inputs */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
           <div>
-            <label className="text-[11px] font-mono text-zinc-400 block mb-1">Nome Team:</label>
+            <label className="text-[11px] font-mono text-zinc-400 block mb-1">Team Name:</label>
             <input
               type="text"
               value={teamName}
@@ -167,7 +167,7 @@ ${submissionData.whatsNext}
             />
           </div>
           <div>
-            <label className="text-[11px] font-mono text-zinc-400 block mb-1">Membri & Ruoli:</label>
+            <label className="text-[11px] font-mono text-zinc-400 block mb-1">Members & Roles:</label>
             <input
               type="text"
               value={teamMembers}

@@ -10,9 +10,7 @@ import {
   Send, 
   Bot, 
   Check, 
-  ChevronRight,
-  BookOpen,
-  Sparkles
+  BookOpen
 } from 'lucide-react';
 import { AI_CONCEPTS } from '../data/concepts';
 import { renderBionicText, speechService } from '../utils/textUtils';
@@ -53,9 +51,9 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
       const length = userResponse.trim().length;
       let reply = '';
       if (length < 25) {
-        reply = `Ottimo spunto di partenza. Considera però: in un contesto reale di deployment, cosa accadrebbe se la distribuzione dei dati di test divergesse significativamente da quella di training (Distribution Shift)?`;
+        reply = `Thought-provoking initial intuition! Consider this: in a real-world deployment, what happens if the testing distribution diverges from the training distribution (Distribution Shift)? How would the model adapt?`;
       } else {
-        reply = `Analisi precisa. Hai individuato il nucleo del problema: la convergenza dipende direttamente dalla qualità del segnale di feedback. Nel modello formale, questa intuizione corrisponde alla convergenza asintotica della Loss tramite discesa del gradiente stocastico.`;
+        reply = `Precise analysis! You have captured the essential mechanism: artificial representations converge through error feedback minimization. Mathematically, this maps directly to empirical risk minimization and gradient descent on the loss landscape.`;
       }
       setSocraticFeedback(reply);
       setIsThinking(false);
@@ -78,9 +76,9 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
         <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/[0.06]">
           <div className="flex items-center gap-2">
             <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-              Curriculum Modulare
+              Modular Curriculum
             </span>
-            <span className="text-[11px] text-zinc-500">· 4 Fondamenti</span>
+            <span className="text-[11px] text-zinc-500">· 4 Core Foundations</span>
           </div>
           
           <button
@@ -92,7 +90,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
             }`}
           >
             {isSpeaking ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-            <span>{isSpeaking ? 'Ferma Voce' : 'Ascolta Contenuto'}</span>
+            <span>{isSpeaking ? 'Stop Audio' : 'Listen with Audio TTS'}</span>
           </button>
         </div>
 
@@ -137,7 +135,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
               {concept.category}
             </span>
             <span className="text-[11px] text-zinc-500 font-mono">
-              Livello: {concept.difficulty}
+              Level: {concept.difficulty}
             </span>
           </div>
           
@@ -161,7 +159,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
             }`}
           >
             <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
-            <span>Analogia Visiva</span>
+            <span>Visual Analogy</span>
           </button>
 
           <button
@@ -173,7 +171,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
             }`}
           >
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Micro-Step Esecutivi</span>
+            <span>Executive Micro-Steps</span>
           </button>
 
           <button
@@ -185,7 +183,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
             }`}
           >
             <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Semplificazione Intuitiva</span>
+            <span>ELI5 Simplification</span>
           </button>
 
           <button
@@ -197,7 +195,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
             }`}
           >
             <Code2 className="w-3.5 h-3.5 text-indigo-400" />
-            <span>Formalismo Matematico</span>
+            <span>Formal Deep Dive</span>
           </button>
 
           <button
@@ -209,7 +207,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
             }`}
           >
             <HelpCircle className="w-3.5 h-3.5 text-teal-400" />
-            <span>Indagine Socratica</span>
+            <span>Socratic Dialogue</span>
           </button>
         </div>
 
@@ -228,7 +226,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
                 {renderBionicText(concept.metaphor.story, bionicReading)}
               </div>
               <p className="text-[11px] text-zinc-500 leading-normal">
-                Modello cognitivo analogico: ancora i concetti astratti a strutture fisiche già note alla memoria episodica.
+                Analog cognitive framework: anchors abstract mathematical constructs to tangible real-world processes.
               </p>
             </div>
           )}
@@ -237,8 +235,8 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
           {activeLens === 'steps' && (
             <div className="space-y-3">
               <div className="flex items-center justify-between text-xs text-zinc-400">
-                <span>Checklist di decompressione cognitiva:</span>
-                <span className="font-mono text-[11px] text-zinc-500">4 milestone sequenziali</span>
+                <span>Cognitive decompression checklist:</span>
+                <span className="font-mono text-[11px] text-zinc-500">4 sequential milestones</span>
               </div>
 
               <div className="grid gap-2 sm:grid-cols-2">
@@ -284,7 +282,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
           {activeLens === 'eli5' && (
             <div className="space-y-3">
               <div className="text-sm font-semibold text-zinc-200">
-                Sintesi ad Alta Comprensione
+                High-Retention Intuitive Explanation
               </div>
               <div className="ui-panel-elevated p-5 text-zinc-300 text-xs sm:text-sm leading-relaxed">
                 {renderBionicText(concept.explainLike5, bionicReading)}
@@ -296,7 +294,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
           {activeLens === 'deepdive' && (
             <div className="space-y-3">
               <div className="text-sm font-semibold text-zinc-200">
-                Architettura e Formulazione Rigorosa
+                Rigorous Architecture & Formulation
               </div>
               <pre className="code-block p-4 text-zinc-300 text-xs font-mono overflow-x-auto whitespace-pre-wrap leading-relaxed">
                 {concept.deepDive}
@@ -309,7 +307,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
             <div className="space-y-4">
               <div className="p-4 rounded-xl bg-zinc-900/70 border border-white/[0.08] space-y-1">
                 <div className="text-[11px] font-mono uppercase tracking-wider text-indigo-400">
-                  Quesito di Verifica Concettuale:
+                  Active-Recall Conceptual Challenge:
                 </div>
                 <div className="text-xs sm:text-sm font-medium text-zinc-200">
                   "{concept.socraticQuestions[0]}"
@@ -320,13 +318,13 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
                 <textarea
                   value={userResponse}
                   onChange={(e) => setUserResponse(e.target.value)}
-                  placeholder="Formula la tua ipotesi o spiegazione concettuale..."
+                  placeholder="Formulate your hypothesis or intuitive reasoning..."
                   rows={3}
                   className="w-full bg-zinc-950 border border-white/[0.08] rounded-xl p-3 text-xs text-zinc-200 placeholder-zinc-600 focus:outline-none focus:border-indigo-500 transition-colors"
                 />
                 <div className="flex justify-between items-center">
                   <span className="text-[11px] text-zinc-500 font-mono">
-                    Invio immediato per valutazione pedagogica
+                    Instant AI evaluation for pedagogical guidance
                   </span>
                   <button
                     type="submit"
@@ -334,11 +332,11 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
                     className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs disabled:opacity-40 transition-all cursor-pointer"
                   >
                     {isThinking ? (
-                      <span>Elaborazione in corso...</span>
+                      <span>Analyzing reflection...</span>
                     ) : (
                       <>
                         <Send className="w-3 h-3" />
-                        <span>Analizza Risposta</span>
+                        <span>Submit Reflection</span>
                       </>
                     )}
                   </button>
@@ -349,7 +347,7 @@ export default function SocraticMentor({ bionicReading, isSpeaking, setIsSpeakin
                 <div className="p-4 rounded-xl bg-zinc-900 border border-white/[0.1] text-xs leading-relaxed space-y-1">
                   <div className="font-semibold text-indigo-400 flex items-center gap-1.5">
                     <Bot className="w-3.5 h-3.5" />
-                    <span>Feedback Mentore:</span>
+                    <span>Minerva Mentor Feedback:</span>
                   </div>
                   <p className="text-zinc-300">
                     {socraticFeedback}

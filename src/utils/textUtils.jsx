@@ -12,7 +12,7 @@ export function renderBionicText(text, enabled = false) {
 
     return (
       <span key={wIdx} className="inline-block mr-1">
-        <strong className="font-bold text-violet-400">{boldPart}</strong>
+        <strong className="font-semibold text-indigo-300">{boldPart}</strong>
         <span>{restPart}</span>
       </span>
     );
