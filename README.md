@@ -9,6 +9,8 @@
 [![Accessibility WCAG AAA](https://img.shields.io/badge/A11y-WCAG%20AAA-brightgreen.svg)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+![Minerva Platform Thumbnail](./media/minerva_thumbnail.jpg)
+
 ---
 
 ## 🌟 The Mission & Problem Statement
@@ -68,6 +70,24 @@ Minerva features dedicated controls built directly into the header:
 
 ---
 
+---
+
+## 📸 Media Showcase & Demo Video
+
+| Socratic AI Tutor | Interactive ML Laboratories |
+| :---: | :---: |
+| ![Socratic Tutor](./media/screenshots/01_socratic_tutor.png) | ![Interactive Labs](./media/screenshots/02_interactive_labs_perceptron.png) |
+
+| Impact Launchpad (UN SDG) | Devpost Pitch Submission |
+| :---: | :---: |
+| ![Impact Launchpad](./media/screenshots/04_impact_launchpad.png) | ![Devpost Pitch](./media/screenshots/05_devpost_pitch.png) |
+
+### 🎬 Walkthrough Video
+The 33-second high-definition interactive demo walkthrough is available in:  
+📁 [`media/minerva_demo_video.mp4`](./media/minerva_demo_video.mp4)
+
+---
+
 ## 🛠️ Tech Stack
 
 - **Frontend:** React 19, Vite 8, Tailwind CSS v4, Lucide React
@@ -82,8 +102,8 @@ Minerva features dedicated controls built directly into the header:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/minerva.git
-cd minerva
+git clone https://github.com/mareknardella-lgtm/Minerva.git
+cd Minerva
 
 # 2. Install dependencies
 npm install
