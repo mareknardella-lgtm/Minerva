@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: 'Lexend', system-ui, -apple-system, sans-serif;
+    --font-heading: 'Outfit', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
+    /* Default Theme: Calm Lavender (Sensory-friendly for ADHD/Autism) */
+    --bg-primary: #0d0f18;
+    --bg-secondary: #141829;
+    --bg-card: rgba(26, 31, 56, 0.75);
+    --bg-card-hover: rgba(35, 42, 74, 0.9);
+    --border-color: rgba(139, 92, 246, 0.2);
+    --border-focus: #a855f7;
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-muted: #94a3b8;
+    --accent-primary: #8b5cf6;
+    --accent-secondary: #06b6d4;
+    --accent-glow: rgba(139, 92, 246, 0.35);
+    --accent-success: #10b981;
+    --accent-warning: #f59e0b;
+  }
+
+  /* High Contrast Mode (WCAG AAA) */
+  body.theme-high-contrast {
+    --bg-primary: #000000;
+    --bg-secondary: #121212;
+    --bg-card: #1c1c1c;
+    --bg-card-hover: #262626;
+    --border-color: #facc15;
+    --border-focus: #ffffff;
+    --text-primary: #ffffff;
+    --text-secondary: #fef08a;
+    --text-muted: #e2e8f0;
+    --accent-primary: #facc15;
+    --accent-secondary: #38bdf8;
+    --accent-glow: rgba(250, 204, 21, 0.4);
+    --accent-success: #4ade80;
+    --accent-warning: #fbbf24;
+  }
+
+  /* Warm Paper / Sepia Mode (Anti-eyestrain, warm daylight) */
+  body.theme-warm-paper {
+    --bg-primary: #fdf6e2;
+    --bg-secondary: #f4ecd0;
+    --bg-card: #fffcf4;
+    --bg-card-hover: #ffffff;
+    --border-color: #d8cca3;
+    --border-focus: #7c5e2a;
+    --text-primary: #2d261e;
+    --text-secondary: #5c4e3b;
+    --text-muted: #7d6b53;
+    --accent-primary: #b45309;
+    --accent-secondary: #0f766e;
+    --accent-glow: rgba(180, 83, 9, 0.25);
+    --accent-success: #15803d;
+    --accent-warning: #d97706;
+  }
+
+  /* Dyslexic / Focus Font Overrides */
+  body.font-dyslexic {
+    font-family: 'Lexend', sans-serif !important;
+    letter-spacing: 0.05em;
+    line-height: 1.75;
+    word-spacing: 0.1em;
+  }
+
+  body.font-standard {
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* Custom scrollbar for clean UI */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-primary);
+  }
+}
+
+/* Glassmorphism utility card */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+}
+
+.glass-panel:hover {
+  border-color: var(--border-focus);
+}
+
+/* Pulse glow animation for active AI neurons and interactive labs */
+@keyframes neuron-pulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+.animate-neuron {
+  animation: neuron-pulse 2.5s infinite ease-in-out;
+}
