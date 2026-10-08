@@ -74,22 +74,19 @@ function App() {
 
       </main>
 
-      {/* Footer */}
+      {/* Minimal Footer */}
       {!focusMode && (
-        <footer className="border-t border-slate-800/80 py-6 px-4 text-center text-xs text-slate-500 bg-slate-950/40">
+        <footer className="border-t border-white/[0.06] py-5 px-4 text-xs text-zinc-500">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-violet-400 font-['Outfit']">MINERVA AI</span>
-              <span>— Costruito per il</span>
-              <span className="text-slate-300 font-medium">ML Empowerment Build Challenge</span>
+              <span className="font-semibold text-zinc-300 font-['Outfit']">Minerva</span>
+              <span>·</span>
+              <span className="text-zinc-500 font-mono text-[11px]">ML Empowerment Build Challenge 2026</span>
             </div>
-            <div className="flex items-center gap-4 text-slate-400">
-              <span className="flex items-center gap-1 text-[11px]">
-                <HeartHandshake className="w-3.5 h-3.5 text-pink-400" /> Open Education & Neurodiversity
-              </span>
-              <span className="flex items-center gap-1 text-[11px]">
-                <Trophy className="w-3.5 h-3.5 text-amber-400" /> Devpost Submission Ready
-              </span>
+            <div className="flex items-center gap-4 text-zinc-500 font-mono text-[11px]">
+              <span>Accessible Machine Learning</span>
+              <span>·</span>
+              <span>WCAG AAA Compliant</span>
             </div>
           </div>
         </footer>

@@ -2,17 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Play, 
   RotateCcw, 
-  Sparkles, 
   BrainCircuit, 
   Layers, 
   Grid3X3, 
-  Gauge, 
-  Plus, 
-  Sliders, 
-  Eye, 
-  Cpu, 
-  CheckCircle,
-  HelpCircle
+  Pause,
+  ChevronRight,
+  Sparkles,
+  Info
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -24,37 +20,34 @@ export default function InteractiveLabs() {
      ========================================================================= */
   const canvasRef = useRef(null);
   const [points, setPoints] = useState([
-    // Class 0 (Cyan, label 0)
-    { x: 60, y: 70, label: 0 },
-    { x: 90, y: 110, label: 0 },
-    { x: 120, y: 60, label: 0 },
-    { x: 80, y: 150, label: 0 },
-    { x: 140, y: 130, label: 0 },
-    // Class 1 (Purple, label 1)
-    { x: 220, y: 220, label: 1 },
-    { x: 260, y: 250, label: 1 },
-    { x: 280, y: 190, label: 1 },
-    { x: 240, y: 280, label: 1 },
-    { x: 300, y: 240, label: 1 }
+    // Class 0 (Electric Blue, label 0)
+    { x: 70, y: 80, label: 0 },
+    { x: 100, y: 120, label: 0 },
+    { x: 130, y: 70, label: 0 },
+    { x: 90, y: 160, label: 0 },
+    { x: 150, y: 140, label: 0 },
+    // Class 1 (Rose/Crimson, label 1)
+    { x: 230, y: 230, label: 1 },
+    { x: 270, y: 260, label: 1 },
+    { x: 290, y: 200, label: 1 },
+    { x: 250, y: 290, label: 1 },
+    { x: 310, y: 250, label: 1 }
   ]);
   const [currentClass, setCurrentClass] = useState(0);
-  const [weights, setWeights] = useState({ w1: 0.1, w2: -0.2, bias: 0.05 });
-  const [learningRate, setLearningRate] = useState(0.05);
+  const [weights, setWeights] = useState({ w1: 0.12, w2: -0.18, bias: 0.04 });
+  const [learningRate, setLearningRate] = useState(0.06);
   const [isTraining, setIsTraining] = useState(false);
   const [epoch, setEpoch] = useState(0);
   const [accuracy, setAccuracy] = useState(0);
   const [loss, setLoss] = useState(0);
 
-  // Compute Perceptron Prediction
   const predictPerceptron = (pt, w) => {
-    // Normalize coordinates 0..360 to -1..1
     const nx = (pt.x - 180) / 180;
     const ny = (pt.y - 180) / 180;
     const z = w.w1 * nx + w.w2 * ny + w.bias;
     return z >= 0 ? 1 : 0;
   };
 
-  // Evaluate accuracy and loss
   const evaluateModel = (w, pts) => {
     if (pts.length === 0) return { acc: 0, l: 0 };
     let correct = 0;
@@ -76,7 +69,6 @@ export default function InteractiveLabs() {
     };
   };
 
-  // Draw Perceptron Canvas
   useEffect(() => {
     if (activeLab !== 'perceptron') return;
     const canvas = canvasRef.current;
@@ -85,10 +77,11 @@ export default function InteractiveLabs() {
     const width = canvas.width;
     const height = canvas.height;
 
+    // Crisp high-DPI rendering
     ctx.clearRect(0, 0, width, height);
 
-    // Draw background grid
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
+    // Subtle coordinate grid
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
     ctx.lineWidth = 1;
     for (let x = 0; x <= width; x += 30) {
       ctx.beginPath();
@@ -103,13 +96,20 @@ export default function InteractiveLabs() {
       ctx.stroke();
     }
 
-    // Draw Decision Boundary Line: w1*nx + w2*ny + b = 0
-    // ny = (-w1*nx - b) / w2
+    // Axes
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(width / 2, 0);
+    ctx.lineTo(width / 2, height);
+    ctx.moveTo(0, height / 2);
+    ctx.lineTo(width, height / 2);
+    ctx.stroke();
+
+    // Decision Boundary Line: w1*nx + w2*ny + b = 0
     if (Math.abs(weights.w2) > 0.001) {
-      ctx.strokeStyle = '#a855f7';
-      ctx.lineWidth = 3;
-      ctx.shadowColor = 'rgba(168, 85, 247, 0.8)';
-      ctx.shadowBlur = 10;
+      ctx.strokeStyle = '#818cf8';
+      ctx.lineWidth = 2.5;
       ctx.beginPath();
 
       const getCanvasY = (canvasX) => {
@@ -123,26 +123,22 @@ export default function InteractiveLabs() {
       ctx.moveTo(0, y0);
       ctx.lineTo(width, yEnd);
       ctx.stroke();
-      ctx.shadowBlur = 0;
     }
 
-    // Draw points
+    // Points
     points.forEach((p) => {
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 8, 0, Math.PI * 2);
+      ctx.arc(p.x, p.y, 6.5, 0, Math.PI * 2);
       if (p.label === 0) {
-        ctx.fillStyle = '#06b6d4';
-        ctx.shadowColor = 'rgba(6, 182, 212, 0.8)';
+        ctx.fillStyle = '#38bdf8';
+        ctx.strokeStyle = '#0284c7';
       } else {
-        ctx.fillStyle = '#ec4899';
-        ctx.shadowColor = 'rgba(236, 72, 153, 0.8)';
+        ctx.fillStyle = '#f43f5e';
+        ctx.strokeStyle = '#be123c';
       }
-      ctx.shadowBlur = 8;
       ctx.fill();
-      ctx.lineWidth = 2;
-      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 1.5;
       ctx.stroke();
-      ctx.shadowBlur = 0;
     });
 
     const metrics = evaluateModel(weights, points);
@@ -150,7 +146,6 @@ export default function InteractiveLabs() {
     setLoss(metrics.l);
   }, [points, weights, activeLab]);
 
-  // Train one step
   const trainStep = () => {
     let newW1 = weights.w1;
     let newW2 = weights.w2;
@@ -171,27 +166,21 @@ export default function InteractiveLabs() {
     const updated = { w1: newW1, w2: newW2, bias: newBias };
     setWeights(updated);
     setEpoch(prev => prev + 1);
-
-    const metrics = evaluateModel(updated, points);
-    if (metrics.acc === 100) {
-      confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
-    }
   };
 
-  // Continuous Training Loop
   useEffect(() => {
     let interval;
     if (isTraining) {
       interval = setInterval(() => {
         setEpoch(curr => {
-          if (curr >= 60 || accuracy === 100) {
+          if (curr >= 50 || accuracy === 100) {
             setIsTraining(false);
             return curr;
           }
           trainStep();
           return curr + 1;
         });
-      }, 80);
+      }, 70);
     }
     return () => clearInterval(interval);
   }, [isTraining, accuracy, weights, points, learningRate]);
@@ -199,22 +188,22 @@ export default function InteractiveLabs() {
   const handleCanvasClick = (e) => {
     if (!canvasRef.current) return;
     const rect = canvasRef.current.getBoundingClientRect();
-    const x = Math.max(10, Math.min(350, e.clientX - rect.left));
-    const y = Math.max(10, Math.min(350, e.clientY - rect.top));
+    const x = Math.max(15, Math.min(345, e.clientX - rect.left));
+    const y = Math.max(15, Math.min(345, e.clientY - rect.top));
     setPoints(prev => [...prev, { x, y, label: currentClass }]);
   };
 
   const resetPerceptron = () => {
-    setWeights({ w1: (Math.random() - 0.5) * 0.4, w2: (Math.random() - 0.5) * 0.4, bias: (Math.random() - 0.5) * 0.2 });
+    setWeights({ w1: (Math.random() - 0.5) * 0.3, w2: (Math.random() - 0.5) * 0.3, bias: (Math.random() - 0.5) * 0.2 });
     setEpoch(0);
     setIsTraining(false);
   };
 
   /* =========================================================================
-     LAB 2: TRANSFORMER TOKEN ATTENTION & SENTIMENT STATE
+     LAB 2: TRANSFORMER TOKEN ATTENTION STATE
      ========================================================================= */
   const [sentence, setSentence] = useState('Minerva empowers students with accessible AI education');
-  const [selectedTokenIdx, setSelectedTokenIdx] = useState(1); // Default to 'empowers'
+  const [selectedTokenIdx, setSelectedTokenIdx] = useState(1);
 
   const sampleSentences = [
     'Minerva empowers students with accessible AI education',
@@ -224,18 +213,15 @@ export default function InteractiveLabs() {
 
   const tokens = sentence.split(' ').filter(t => t.length > 0);
 
-  // Compute simulated self-attention weights based on semantic distance
   const getAttentionWeights = (sourceIdx) => {
     return tokens.map((_, targetIdx) => {
       if (sourceIdx === targetIdx) return 0.95;
       const dist = Math.abs(sourceIdx - targetIdx);
-      // Higher weight to neighboring or key terms
-      const base = Math.max(0.15, 0.85 - dist * 0.18);
+      const base = Math.max(0.12, 0.85 - dist * 0.18);
       return Math.min(0.9, base + (sourceIdx % 2 === 0 ? 0.05 : -0.05));
     });
   };
 
-  // Compute sentiment polarity score
   const getSentiment = (txt) => {
     const positiveWords = ['empowers', 'accessible', 'clean', 'transforms', 'health', 'education', 'smart', 'good'];
     const negativeWords = ['bias', 'unfair', 'harmful', 'bad', 'poor', 'danger', 'failure'];
@@ -249,12 +235,11 @@ export default function InteractiveLabs() {
   const sentimentScore = getSentiment(sentence);
 
   /* =========================================================================
-     LAB 3: COMPUTER VISION & CONVOLUTION FILTER STATE
+     LAB 3: COMPUTER VISION & CONVOLUTION STATE
      ========================================================================= */
   const GRID_SIZE = 10;
   const [pixelGrid, setPixelGrid] = useState(() => {
     const g = Array(GRID_SIZE).fill(0).map(() => Array(GRID_SIZE).fill(0));
-    // Draw default 'X' pattern
     for (let i = 2; i < 8; i++) {
       g[i][i] = 1;
       g[i][9 - i] = 1;
@@ -266,46 +251,45 @@ export default function InteractiveLabs() {
 
   const KERNELS = {
     'sobel-h': {
-      name: 'Rilevatore Bordi Orizzontali (Sobel H)',
+      name: 'Sobel Horizontal (Bordi Orizzontali)',
       matrix: [
         [-1, -2, -1],
         [ 0,  0,  0],
         [ 1,  2,  1]
       ],
-      desc: 'Enfatizza transizioni e linee orizzontali azzerando sfondi piatti.'
+      desc: 'Estrae gradienti d\'intensità verticale evidenziando i margini orizzontali.'
     },
     'sobel-v': {
-      name: 'Rilevatore Bordi Verticali (Sobel V)',
+      name: 'Sobel Vertical (Bordi Verticali)',
       matrix: [
         [-1, 0, 1],
         [-2, 0, 2],
         [-1, 0, 1]
       ],
-      desc: 'Rileva bordi e contorni verticali (essenziale per riconoscimento sagome).'
+      desc: 'Estrae gradienti d\'intensità orizzontale evidenziando contorni e linee verticali.'
     },
     'sharpen': {
-      name: 'Filtro Nitidezza (Sharpening)',
+      name: 'Sharpening (Enfasi Contrasto)',
       matrix: [
         [ 0, -1,  0],
         [-1,  5, -1],
         [ 0, -1,  0]
       ],
-      desc: 'Amplifica i gradienti di contrasto tra pixel adiacenti.'
+      desc: 'Amplifica le alte frequenze spaziali e i passaggi netti di luminosità.'
     },
     'blur': {
-      name: 'Sfocatura Gaussiana (Noise Reduction)',
+      name: 'Gaussian Approximation (Smoothing)',
       matrix: [
-        [1/9, 1/9, 1/9],
-        [1/9, 1/9, 1/9],
-        [1/9, 1/9, 1/9]
+        [0.11, 0.11, 0.11],
+        [0.11, 0.11, 0.11],
+        [0.11, 0.11, 0.11]
       ],
-      desc: 'Media i pixel circostanti per eliminare rumore e variazioni microscopiche.'
+      desc: 'Filtro passa-basso per l\'attenuazione del rumore pixel ad alta frequenza.'
     }
   };
 
   const activeKernel = KERNELS[activeKernelName];
 
-  // Compute 2D Convolution Output Feature Map
   const computeConvolution = () => {
     const k = activeKernel.matrix;
     const out = Array(GRID_SIZE).fill(0).map(() => Array(GRID_SIZE).fill(0));
@@ -317,7 +301,6 @@ export default function InteractiveLabs() {
             sum += pixelGrid[r + kr][c + kc] * k[kr + 1][kc + 1];
           }
         }
-        // Normalize between 0 and 1
         out[r][c] = Math.max(0, Math.min(1, Math.abs(sum) / 2));
       }
     }
@@ -357,116 +340,114 @@ export default function InteractiveLabs() {
   return (
     <div className="space-y-6">
       
-      {/* Header and Lab Mode Switcher */}
-      <div className="glass-panel rounded-2xl p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+      {/* Lab Module Selector (Segmented Bar) */}
+      <div className="ui-panel p-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3 pb-3 border-b border-white/[0.06]">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 mb-2">
-              <Cpu className="w-3.5 h-3.5" />
-              <span>Micro-Laboratori Interattivi Browser-Native</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Sperimenta l'Intelligenza Artificiale dal Vivo
+            <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block">
+              Ambiente di Esecuzione Locale
+            </span>
+            <h1 className="text-xl font-bold tracking-tight text-zinc-100 font-['Outfit']">
+              Laboratori Algoritmici Interattivi
             </h1>
-            <p className="text-sm text-slate-300 mt-1">
-              Zero installazioni. Tocca gli algoritmi con mano e osserva la matematica prendere vita in tempo reale.
-            </p>
           </div>
+          <span className="text-[11px] text-zinc-500 font-mono">
+            Zero latenza cloud · Esecuzione WebAssembly & Canvas
+          </span>
         </div>
 
-        {/* Lab Switcher Tabs */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-700/50">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
           <button
             onClick={() => setActiveLab('perceptron')}
-            className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+            className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
               activeLab === 'perceptron'
-                ? 'bg-gradient-to-br from-violet-600/30 to-indigo-600/20 border-violet-400 shadow-lg shadow-violet-500/15'
-                : 'bg-slate-900/40 border-slate-800 hover:border-slate-700'
+                ? 'bg-zinc-800 text-white border-white/10 shadow-sm'
+                : 'bg-zinc-900/40 border-white/[0.06] text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
-              <BrainCircuit className="w-4 h-4 text-violet-400" />
-              <h2 className="text-xs font-bold text-white">Lab 1: Perceptron 2D</h2>
+              <BrainCircuit className="w-3.5 h-3.5 text-indigo-400" />
+              <span className="text-xs font-semibold">1. Perceptron 2D</span>
             </div>
-            <p className="text-[11px] text-slate-400">
-              Disegna classi di punti, allena il neurone e visualizza il confine decisionale.
+            <p className="text-[11px] text-zinc-500 line-clamp-1">
+              Iperpiano di separazione e convergenza loss.
             </p>
           </button>
 
           <button
             onClick={() => setActiveLab('attention')}
-            className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+            className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
               activeLab === 'attention'
-                ? 'bg-gradient-to-br from-cyan-600/30 to-blue-600/20 border-cyan-400 shadow-lg shadow-cyan-500/15'
-                : 'bg-slate-900/40 border-slate-800 hover:border-slate-700'
+                ? 'bg-zinc-800 text-white border-white/10 shadow-sm'
+                : 'bg-zinc-900/40 border-white/[0.06] text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
-              <Layers className="w-4 h-4 text-cyan-400" />
-              <h2 className="text-xs font-bold text-white">Lab 2: Transformer Attention</h2>
+              <Layers className="w-3.5 h-3.5 text-sky-400" />
+              <span className="text-xs font-semibold">2. Transformer Attention</span>
             </div>
-            <p className="text-[11px] text-slate-400">
-              Esplora i pesi di Self-Attention tra token e mappa termica del sentiment.
+            <p className="text-[11px] text-zinc-500 line-clamp-1">
+              Pesi di auto-attenzione e analisi di valenza semantica.
             </p>
           </button>
 
           <button
             onClick={() => setActiveLab('vision')}
-            className={`p-3.5 rounded-xl border text-left transition-all cursor-pointer ${
+            className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
               activeLab === 'vision'
-                ? 'bg-gradient-to-br from-pink-600/30 to-rose-600/20 border-pink-400 shadow-lg shadow-pink-500/15'
-                : 'bg-slate-900/40 border-slate-800 hover:border-slate-700'
+                ? 'bg-zinc-800 text-white border-white/10 shadow-sm'
+                : 'bg-zinc-900/40 border-white/[0.06] text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <div className="flex items-center gap-2 mb-1">
-              <Grid3X3 className="w-4 h-4 text-pink-400" />
-              <h2 className="text-xs font-bold text-white">Lab 3: Vision Convoluzione</h2>
+              <Grid3X3 className="w-3.5 h-3.5 text-teal-400" />
+              <span className="text-xs font-semibold">3. Kernel Convoluzionali</span>
             </div>
-            <p className="text-[11px] text-slate-400">
-              Disegna pixel e applica filtri kernel 3x3 (Sobel, Sharpen, Blur) in tempo reale.
+            <p className="text-[11px] text-zinc-500 line-clamp-1">
+              Filtri 3x3 spaziali e feature map tensoriale.
             </p>
           </button>
         </div>
       </div>
 
       {/* =====================================================================
-          LAB 1 CONTENT: PERCEPTRON PLAYGROUND
+          LAB 1: PERCEPTRON PLAYGROUND
           ===================================================================== */}
       {activeLab === 'perceptron' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          {/* Canvas Interactive Section */}
-          <div className="lg:col-span-7 glass-panel rounded-2xl p-5 flex flex-col items-center">
-            <div className="w-full flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-300">Piano Cartesiano Feature</span>
-                <span className="text-[10px] text-slate-500">(Clicca per aggiungere punti)</span>
-              </div>
-              <div className="flex items-center gap-2">
+          {/* Canvas Section */}
+          <div className="lg:col-span-7 ui-panel p-5 flex flex-col items-center">
+            <div className="w-full flex items-center justify-between mb-3 text-xs">
+              <span className="text-zinc-300 font-medium">
+                Piano Feature 2D <span className="text-zinc-500 font-mono text-[11px]">(Click per campionare)</span>
+              </span>
+
+              <div className="flex items-center gap-1.5 p-0.5 rounded-lg bg-zinc-900 border border-white/[0.06]">
                 <button
                   onClick={() => setCurrentClass(0)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                  className={`px-2.5 py-1 rounded text-xs font-medium transition-all cursor-pointer ${
                     currentClass === 0
-                      ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300'
-                      : 'bg-slate-800/40 border-slate-700 text-slate-400'
+                      ? 'bg-sky-500/20 text-sky-300 border border-sky-500/30 font-semibold'
+                      : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
-                  Classe A (Ciano)
+                  Classe 0 (Sky)
                 </button>
                 <button
                   onClick={() => setCurrentClass(1)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                  className={`px-2.5 py-1 rounded text-xs font-medium transition-all cursor-pointer ${
                     currentClass === 1
-                      ? 'bg-pink-500/20 border-pink-400 text-pink-300'
-                      : 'bg-slate-800/40 border-slate-700 text-slate-400'
+                      ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30 font-semibold'
+                      : 'text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
-                  Classe B (Magenta)
+                  Classe 1 (Rose)
                 </button>
               </div>
             </div>
 
-            <div className="relative border border-slate-700/80 rounded-2xl overflow-hidden bg-slate-950 shadow-inner cursor-crosshair">
+            <div className="relative border border-white/[0.08] rounded-xl overflow-hidden bg-[#07080c] shadow-inner cursor-crosshair">
               <canvas
                 ref={canvasRef}
                 width={360}
@@ -476,66 +457,69 @@ export default function InteractiveLabs() {
               />
             </div>
 
-            {/* Canvas Legend */}
-            <div className="w-full flex items-center justify-between text-[11px] text-slate-400 mt-3 pt-2 border-t border-slate-800">
+            <div className="w-full flex items-center justify-between text-[11px] text-zinc-500 mt-3 pt-2.5 border-t border-white/[0.06] font-mono">
               <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 inline-block"></span> Classe 0
+                <span className="flex items-center gap-1.5 text-sky-400">
+                  <span className="w-2 h-2 rounded-full bg-sky-400 inline-block"></span> y = 0
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-2.5 h-2.5 rounded-full bg-pink-500 inline-block"></span> Classe 1
+                <span className="flex items-center gap-1.5 text-rose-400">
+                  <span className="w-2 h-2 rounded-full bg-rose-400 inline-block"></span> y = 1
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-4 h-0.5 bg-purple-500 inline-block"></span> Confine Decisionale
+                <span className="flex items-center gap-1.5 text-indigo-400">
+                  <span className="w-3 h-0.5 bg-indigo-400 inline-block"></span> wᵀx + b = 0
                 </span>
               </div>
               <button
                 onClick={() => setPoints([])}
-                className="text-slate-400 hover:text-rose-400 transition-colors cursor-pointer"
+                className="text-zinc-500 hover:text-zinc-300 transition-colors cursor-pointer"
               >
-                Pulisci Punti
+                Pulisci
               </button>
             </div>
           </div>
 
-          {/* Model Controls & Metrics */}
+          {/* Diagnostics & Control Section */}
           <div className="lg:col-span-5 space-y-4">
             
-            {/* Real-time Metrics Card */}
-            <div className="glass-panel rounded-2xl p-5">
-              <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">
-                Metriche Neurone in Tempo Reale
-              </h2>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-xl">
-                  <span className="text-[10px] text-slate-400 block">Accuratezza</span>
-                  <span className={`text-xl font-black ${accuracy === 100 ? 'text-emerald-400' : 'text-violet-400'}`}>
+            {/* Real-time Metrics */}
+            <div className="ui-panel p-5">
+              <div className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 mb-3">
+                Diagnostica del Modello
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <div className="p-3 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-center">
+                  <span className="text-[10px] text-zinc-500 block uppercase font-mono">Accuratezza</span>
+                  <span className="text-xl font-bold font-mono text-zinc-100">
                     {accuracy}%
                   </span>
                 </div>
-                <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-xl">
-                  <span className="text-[10px] text-slate-400 block">Perdita (Loss)</span>
-                  <span className="text-xl font-black text-amber-400">{loss}</span>
+                <div className="p-3 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-center">
+                  <span className="text-[10px] text-zinc-500 block uppercase font-mono">Loss (BCE)</span>
+                  <span className="text-xl font-bold font-mono text-amber-400">
+                    {loss}
+                  </span>
                 </div>
-                <div className="bg-slate-900/60 border border-slate-800 p-3 rounded-xl">
-                  <span className="text-[10px] text-slate-400 block">Epoca</span>
-                  <span className="text-xl font-black text-cyan-400">{epoch}</span>
+                <div className="p-3 rounded-lg bg-zinc-900/60 border border-white/[0.06] text-center">
+                  <span className="text-[10px] text-zinc-500 block uppercase font-mono">Epoca</span>
+                  <span className="text-xl font-bold font-mono text-indigo-400">
+                    {epoch}
+                  </span>
                 </div>
               </div>
 
-              {/* Formula & Synaptic Weights */}
-              <div className="mt-4 p-3 bg-slate-950/70 border border-slate-800/80 rounded-xl font-mono text-[11px] text-slate-300">
-                <div className="text-violet-400 font-bold mb-1">Equazione Iperpiano:</div>
-                <div>{weights.w1.toFixed(3)}·x + {weights.w2.toFixed(3)}·y + {weights.bias.toFixed(3)} = 0</div>
+              <div className="mt-3 p-3 rounded-lg bg-zinc-950 border border-white/[0.06] font-mono text-xs text-zinc-300">
+                <div className="text-zinc-500 text-[10px] uppercase mb-1">Stato Pesi Sinaptici:</div>
+                <div>{weights.w1.toFixed(3)}·x₁ + {weights.w2.toFixed(3)}·x₂ + {weights.bias.toFixed(3)} = 0</div>
               </div>
             </div>
 
-            {/* Training Controls */}
-            <div className="glass-panel rounded-2xl p-5 space-y-4">
+            {/* Hyperparameters & Actions */}
+            <div className="ui-panel p-5 space-y-4">
               <div>
-                <div className="flex justify-between text-xs font-semibold text-slate-300 mb-1.5">
-                  <span>Learning Rate (Tasso di Apprendimento):</span>
-                  <span className="text-violet-400">{learningRate}</span>
+                <div className="flex justify-between text-xs font-medium text-zinc-300 mb-1.5">
+                  <span>Learning Rate (η):</span>
+                  <span className="font-mono text-indigo-400">{learningRate}</span>
                 </div>
                 <input
                   type="range"
@@ -544,48 +528,46 @@ export default function InteractiveLabs() {
                   step="0.01"
                   value={learningRate}
                   onChange={(e) => setLearningRate(parseFloat(e.target.value))}
-                  className="w-full accent-violet-500 cursor-pointer"
+                  className="w-full accent-indigo-500 cursor-pointer"
                 />
               </div>
 
-              <div className="flex gap-2 pt-2">
+              <div className="flex gap-2">
                 <button
                   onClick={() => setIsTraining(!isTraining)}
-                  className={`flex-1 py-3 px-4 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-lg transition-all cursor-pointer ${
+                  className={`flex-1 py-2.5 px-3 rounded-lg font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer ${
                     isTraining
                       ? 'bg-amber-600 hover:bg-amber-500 text-white'
-                      : 'bg-violet-600 hover:bg-violet-500 text-white shadow-violet-600/30'
+                      : 'bg-zinc-100 hover:bg-white text-zinc-950'
                   }`}
                 >
-                  <Play className="w-4 h-4 fill-current" />
-                  <span>{isTraining ? 'Metti in Pausa' : 'Avvia Training Automatico'}</span>
+                  {isTraining ? <Pause className="w-3.5 h-3.5 fill-current" /> : <Play className="w-3.5 h-3.5 fill-current" />}
+                  <span>{isTraining ? 'Pausa Training' : 'Addestra Modello'}</span>
                 </button>
 
                 <button
                   onClick={trainStep}
                   disabled={isTraining}
-                  title="Fai avanzare 1 epoca singola"
-                  className="px-3.5 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 disabled:opacity-40 text-slate-200 text-xs font-bold border border-slate-700 transition-colors cursor-pointer"
+                  className="px-3 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 disabled:opacity-40 text-zinc-300 text-xs font-mono border border-white/[0.08] cursor-pointer"
                 >
                   +1 Epoca
                 </button>
 
                 <button
                   onClick={resetPerceptron}
-                  title="Reimposta Pesi Casuali"
-                  className="p-3 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 border border-slate-700 transition-colors cursor-pointer"
+                  className="p-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-white/[0.08] cursor-pointer"
+                  title="Reimposta pesi"
                 >
                   <RotateCcw className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
-            {/* Cognitive Tip */}
-            <div className="p-3.5 bg-violet-950/20 border border-violet-500/20 rounded-xl text-xs text-slate-300 flex items-start gap-2.5">
-              <Sparkles className="w-4 h-4 text-violet-400 shrink-0 mt-0.5" />
-              <span>
-                <strong>Cosa stai osservando:</strong> Quando premi "Avvia Training", il neurone valuta ogni punto. Se sbaglia, applica la regola del gradiente muovendo la linea viola verso la soluzione ottimale!
-              </span>
+            <div className="p-3.5 rounded-xl bg-zinc-900/50 border border-white/[0.06] text-xs text-zinc-400 flex items-start gap-2.5">
+              <Info className="w-4 h-4 text-zinc-500 shrink-0 mt-0.5" />
+              <p className="text-[11px] leading-relaxed">
+                Il confine decisionale ruota minimizzando l'errore per ciascun campione tramite la derivata prima della Binary Cross Entropy.
+              </p>
             </div>
 
           </div>
@@ -594,23 +576,22 @@ export default function InteractiveLabs() {
       )}
 
       {/* =====================================================================
-          LAB 2 CONTENT: TRANSFORMER ATTENTION & SENTIMENT
+          LAB 2: TRANSFORMER TOKEN ATTENTION
           ===================================================================== */}
       {activeLab === 'attention' && (
-        <div className="space-y-6">
-          <div className="glass-panel rounded-2xl p-6">
-            <h2 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">
-              Inserisci o Scegli una Frase di Input:
-            </h2>
+        <div className="space-y-4">
+          <div className="ui-panel p-5">
+            <div className="text-xs font-medium text-zinc-300 mb-2">
+              Frase di Test per l'Inferenza Contestuale:
+            </div>
             <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
                 value={sentence}
                 onChange={(e) => setSentence(e.target.value)}
-                placeholder="Scrivi una frase in inglese o italiano..."
-                className="flex-1 bg-slate-900/70 border border-slate-700/80 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-400"
+                className="flex-1 bg-zinc-950 border border-white/[0.08] rounded-lg px-3.5 py-2 text-xs text-zinc-200 focus:outline-none focus:border-indigo-500"
               />
-              <div className="flex gap-1.5 flex-wrap">
+              <div className="flex gap-1 flex-wrap">
                 {sampleSentences.map((s, idx) => (
                   <button
                     key={idx}
@@ -618,9 +599,9 @@ export default function InteractiveLabs() {
                       setSentence(s);
                       setSelectedTokenIdx(1);
                     }}
-                    className="px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-[11px] text-slate-300 border border-slate-700 transition-colors cursor-pointer"
+                    className="px-2.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-[11px] text-zinc-400 border border-white/[0.06] cursor-pointer"
                   >
-                    Esempio {idx + 1}
+                    Preset {idx + 1}
                   </button>
                 ))}
               </div>
@@ -629,105 +610,94 @@ export default function InteractiveLabs() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
-            {/* Interactive Token Attention Matrix */}
-            <div className="lg:col-span-8 glass-panel rounded-2xl p-6 space-y-5">
+            {/* Attention Matrix */}
+            <div className="lg:col-span-8 ui-panel p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-bold text-white">
-                    Meccanismo di Self-Attention tra Token
+                  <h3 className="text-sm font-semibold text-zinc-200">
+                    Pesi di Auto-Attenzione (Self-Attention Head)
                   </h3>
-                  <p className="text-xs text-slate-400">
-                    Clicca su un token per vedere a quali altre parole rivolge la sua attenzione contestuale.
+                  <p className="text-[11px] text-zinc-500">
+                    Seleziona un token sorgente per calcolare la proiezione softmax sulle altre posizioni.
                   </p>
                 </div>
-                <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
-                  Token Selezionato: "{tokens[selectedTokenIdx] || ''}"
+                <span className="text-[11px] font-mono text-sky-400 px-2 py-0.5 rounded bg-sky-500/10 border border-sky-500/20">
+                  Target: "{tokens[selectedTokenIdx] || ''}"
                 </span>
               </div>
 
               {/* Token Chips */}
-              <div className="flex flex-wrap gap-2.5 py-2">
+              <div className="flex flex-wrap gap-1.5 pt-1">
                 {tokens.map((token, idx) => {
                   const isSelected = idx === selectedTokenIdx;
                   return (
                     <button
                       key={idx}
                       onClick={() => setSelectedTokenIdx(idx)}
-                      className={`px-3.5 py-2 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-mono border transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-cyan-500 text-slate-950 border-cyan-300 shadow-lg shadow-cyan-500/30 scale-105'
-                          : 'bg-slate-900/80 text-slate-200 border-slate-700/80 hover:border-slate-600'
+                          ? 'bg-zinc-100 text-zinc-950 font-semibold border-white shadow-sm'
+                          : 'bg-zinc-900 text-zinc-400 border-white/[0.06] hover:border-white/10'
                       }`}
                     >
-                      <span className="text-[10px] text-slate-400 block font-sans">id:{idx}</span>
+                      <span className="text-[9px] text-zinc-500 block">pos:{idx}</span>
                       {token}
                     </button>
                   );
                 })}
               </div>
 
-              {/* Attention Weight Distribution Bars */}
-              <div className="space-y-2 pt-2 border-t border-slate-800">
-                <span className="text-xs font-bold text-slate-400">
-                  Distribuzione Pesi di Attenzione (Softmax Scores):
-                </span>
-                <div className="space-y-2">
-                  {tokens.map((tok, tIdx) => {
-                    const weights = getAttentionWeights(selectedTokenIdx);
-                    const weightVal = weights[tIdx] || 0.1;
-                    const pct = Math.round(weightVal * 100);
+              {/* Weight Distribution Bars */}
+              <div className="space-y-2 pt-3 border-t border-white/[0.06]">
+                {tokens.map((tok, tIdx) => {
+                  const weights = getAttentionWeights(selectedTokenIdx);
+                  const weightVal = weights[tIdx] || 0.1;
+                  const pct = Math.round(weightVal * 100);
 
-                    return (
-                      <div key={tIdx} className="flex items-center gap-3 text-xs">
-                        <span className="w-24 text-right font-mono text-slate-300 truncate">
-                          {tok}
-                        </span>
-                        <div className="flex-1 h-3.5 bg-slate-950 rounded-full overflow-hidden p-0.5 border border-slate-800">
-                          <div
-                            className={`h-full rounded-full transition-all duration-300 ${
-                              tIdx === selectedTokenIdx
-                                ? 'bg-gradient-to-r from-cyan-400 to-blue-500'
-                                : 'bg-gradient-to-r from-violet-500 to-indigo-500'
-                            }`}
-                            style={{ width: `${pct}%` }}
-                          />
-                        </div>
-                        <span className="w-10 font-mono text-[11px] text-cyan-300 text-right">
-                          {weightVal.toFixed(2)}
-                        </span>
+                  return (
+                    <div key={tIdx} className="flex items-center gap-3 text-xs">
+                      <span className="w-20 text-right font-mono text-zinc-400 truncate">
+                        {tok}
+                      </span>
+                      <div className="flex-1 h-2 bg-zinc-900 rounded-full overflow-hidden">
+                        <div
+                          className={`h-full rounded-full transition-all duration-200 ${
+                            tIdx === selectedTokenIdx ? 'bg-sky-400' : 'bg-indigo-500/70'
+                          }`}
+                          style={{ width: `${pct}%` }}
+                        />
                       </div>
-                    );
-                  })}
-                </div>
+                      <span className="w-8 font-mono text-[11px] text-zinc-400 text-right">
+                        {weightVal.toFixed(2)}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
-            {/* Sentiment & Valence Meter */}
-            <div className="lg:col-span-4 space-y-4">
-              <div className="glass-panel rounded-2xl p-6 text-center space-y-4">
-                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Valenza Sentiment & Polarity
-                </h3>
+            {/* Sentiment Meter */}
+            <div className="lg:col-span-4 ui-panel p-5 flex flex-col justify-between text-center">
+              <div>
+                <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 block mb-4">
+                  Valenza Semantica Stimata
+                </span>
 
-                <div className="relative inline-flex items-center justify-center p-6">
-                  <div className={`w-32 h-32 rounded-full border-4 flex flex-col items-center justify-center shadow-lg transition-colors ${
-                    sentimentScore > 0.1
-                      ? 'border-emerald-500 bg-emerald-500/10 text-emerald-400'
-                      : sentimentScore < -0.1
-                      ? 'border-rose-500 bg-rose-500/10 text-rose-400'
-                      : 'border-amber-500 bg-amber-500/10 text-amber-400'
+                <div className="inline-flex flex-col items-center justify-center p-6 rounded-2xl bg-zinc-900/60 border border-white/[0.06] my-2">
+                  <span className={`text-3xl font-bold font-mono ${
+                    sentimentScore > 0.1 ? 'text-emerald-400' : sentimentScore < -0.1 ? 'text-rose-400' : 'text-amber-400'
                   }`}>
-                    <span className="text-2xl font-black">{sentimentScore.toFixed(2)}</span>
-                    <span className="text-[10px] uppercase font-bold tracking-wider mt-0.5">
-                      {sentimentScore > 0.1 ? 'Positivo' : sentimentScore < -0.1 ? 'Critico/Negativo' : 'Neutrale'}
-                    </span>
-                  </div>
+                    {sentimentScore.toFixed(2)}
+                  </span>
+                  <span className="text-[10px] font-mono uppercase tracking-wider mt-1 text-zinc-500">
+                    {sentimentScore > 0.1 ? 'Orientamento Positivo' : sentimentScore < -0.1 ? 'Critico / Negativo' : 'Neutrale'}
+                  </span>
                 </div>
-
-                <p className="text-xs text-slate-300">
-                  Il Transformer pondera le parole chiave del testo per dedurne orientamento emotivo e intenzione semantica.
-                </p>
               </div>
+
+              <p className="text-[11px] text-zinc-500 leading-normal mt-4">
+                Ponderazione degli embeddings contestuali per la classificazione di valenza affettiva.
+              </p>
             </div>
 
           </div>
@@ -735,105 +705,100 @@ export default function InteractiveLabs() {
       )}
 
       {/* =====================================================================
-          LAB 3 CONTENT: VISION CONVOLUTION STUDIO
+          LAB 3: VISION CONVOLUTION
           ===================================================================== */}
       {activeLab === 'vision' && (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
           {/* Drawing Canvas 10x10 */}
-          <div className="lg:col-span-5 glass-panel rounded-2xl p-6 flex flex-col items-center">
-            <div className="w-full flex items-center justify-between mb-3">
-              <div>
-                <h3 className="text-xs font-bold text-white uppercase tracking-wider">
-                  Matrice Pixel Input (10x10)
-                </h3>
-                <span className="text-[10px] text-slate-400">Clicca i quadratini per disegnare</span>
-              </div>
+          <div className="lg:col-span-5 ui-panel p-5 flex flex-col items-center">
+            <div className="w-full flex items-center justify-between mb-3 text-xs">
+              <span className="text-zinc-300 font-medium">
+                Matrice Input (10x10)
+              </span>
               <div className="flex gap-1">
                 <button
                   onClick={() => setPresetGrid('cross')}
-                  className="px-2 py-1 rounded bg-slate-800 text-[10px] text-slate-300 hover:bg-slate-700 cursor-pointer"
+                  className="px-2 py-0.5 rounded bg-zinc-900 text-[10px] font-mono text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
                 >
                   Croce
                 </button>
                 <button
                   onClick={() => setPresetGrid('box')}
-                  className="px-2 py-1 rounded bg-slate-800 text-[10px] text-slate-300 hover:bg-slate-700 cursor-pointer"
+                  className="px-2 py-0.5 rounded bg-zinc-900 text-[10px] font-mono text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
                 >
-                  Riquadro
+                  Box
                 </button>
                 <button
                   onClick={() => setPresetGrid('diagonal')}
-                  className="px-2 py-1 rounded bg-slate-800 text-[10px] text-slate-300 hover:bg-slate-700 cursor-pointer"
+                  className="px-2 py-0.5 rounded bg-zinc-900 text-[10px] font-mono text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
                 >
-                  Diagonale
+                  Diag
                 </button>
               </div>
             </div>
 
-            <div className="grid grid-cols-10 gap-1 p-2 bg-slate-950 rounded-xl border border-slate-800 shadow-inner">
+            <div className="grid grid-cols-10 gap-1 p-2 bg-[#07080c] rounded-xl border border-white/[0.08]">
               {pixelGrid.map((row, r) =>
                 row.map((val, c) => (
                   <button
                     key={`${r}-${c}`}
                     onClick={() => togglePixel(r, c)}
-                    className={`w-6 h-6 sm:w-7 sm:h-7 rounded transition-colors cursor-pointer ${
-                      val === 1
-                        ? 'bg-pink-500 shadow-sm shadow-pink-500/50'
-                        : 'bg-slate-900 hover:bg-slate-800'
+                    className={`w-6 h-6 rounded transition-colors cursor-pointer ${
+                      val === 1 ? 'bg-zinc-100' : 'bg-zinc-900/80 hover:bg-zinc-800'
                     }`}
                   />
                 ))
               )}
             </div>
-            
+
             <button
               onClick={() => setPixelGrid(Array(GRID_SIZE).fill(0).map(() => Array(GRID_SIZE).fill(0)))}
-              className="mt-3 text-[11px] text-slate-400 hover:text-rose-400 cursor-pointer transition-colors"
+              className="mt-3 text-[11px] text-zinc-500 hover:text-zinc-300 cursor-pointer font-mono"
             >
-              Azzera Disegno
+              Azzera matrice
             </button>
           </div>
 
-          {/* Kernel Filter Selection & Convolution Output */}
+          {/* Kernel & Output */}
           <div className="lg:col-span-7 space-y-4">
             
-            {/* Kernel Selector */}
-            <div className="glass-panel rounded-2xl p-5 space-y-3">
-              <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">
-                Seleziona Kernel di Convoluzione (Filtro 3x3):
-              </h3>
+            {/* Filter Selector */}
+            <div className="ui-panel p-5 space-y-3">
+              <div className="text-xs font-medium text-zinc-300">
+                Seleziona Kernel di Convoluzione (3x3):
+              </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 {Object.entries(KERNELS).map(([kKey, kVal]) => (
                   <button
                     key={kKey}
                     onClick={() => setActiveKernelName(kKey)}
-                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                    className={`p-2.5 rounded-lg border text-left transition-all cursor-pointer ${
                       activeKernelName === kKey
-                        ? 'bg-pink-600/20 border-pink-400 text-pink-300 shadow-md'
-                        : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200'
+                        ? 'bg-zinc-800 text-white border-white/10 shadow-sm font-semibold'
+                        : 'bg-zinc-900/40 text-zinc-400 border-white/[0.06] hover:text-zinc-200'
                     }`}
                   >
-                    <span className="text-[11px] font-bold block truncate">{kVal.name.split(' ')[0]}</span>
-                    <span className="text-[9px] text-slate-500">{kKey}</span>
+                    <div className="text-[11px] font-semibold truncate">{kVal.name.split(' ')[0]}</div>
+                    <div className="text-[9px] font-mono text-zinc-500">{kKey}</div>
                   </button>
                 ))}
               </div>
-              <p className="text-xs text-slate-300 italic bg-slate-900/40 p-2.5 rounded-lg border border-slate-800">
-                "{activeKernel.desc}"
+              <p className="text-xs text-zinc-400 leading-normal bg-zinc-900/40 p-2.5 rounded-lg border border-white/[0.06]">
+                {activeKernel.desc}
               </p>
             </div>
 
-            {/* Feature Map Display */}
-            <div className="glass-panel rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-6">
+            {/* Convolution Calculation */}
+            <div className="ui-panel p-5 flex flex-col sm:flex-row items-center gap-6">
               
-              {/* Kernel Matrix View */}
+              {/* Kernel Matrix */}
               <div className="text-center">
-                <span className="text-[11px] font-bold text-slate-400 block mb-1.5">Kernel 3x3</span>
-                <div className="grid grid-cols-3 gap-1 p-1.5 bg-slate-950 rounded-lg border border-slate-800 font-mono text-[10px]">
+                <span className="text-[11px] font-mono text-zinc-500 block mb-1.5">Kernel W (3x3)</span>
+                <div className="grid grid-cols-3 gap-1 p-2 bg-[#07080c] rounded-lg border border-white/[0.08] font-mono text-[10px]">
                   {activeKernel.matrix.map((row, r) =>
                     row.map((val, c) => (
-                      <div key={`${r}-${c}`} className="w-6 h-6 flex items-center justify-center text-pink-400 font-bold">
+                      <div key={`${r}-${c}`} className="w-6 h-6 flex items-center justify-center text-zinc-300 font-semibold">
                         {typeof val === 'number' && val < 1 && val > 0 ? '0.1' : val}
                       </div>
                     ))
@@ -841,24 +806,22 @@ export default function InteractiveLabs() {
                 </div>
               </div>
 
-              {/* Arrow */}
-              <div className="text-slate-500 font-bold text-sm">➔</div>
+              <div className="text-zinc-600 text-xs font-mono">⊗</div>
 
-              {/* Output Feature Map Grid */}
+              {/* Feature Map */}
               <div className="flex-1 flex flex-col items-center">
-                <span className="text-[11px] font-bold text-slate-300 block mb-1.5">
-                  Mappa delle Feature Risultante (Convoluzione)
+                <span className="text-[11px] font-mono text-zinc-400 block mb-1.5">
+                  Mappa Attivazione Risultante
                 </span>
-                <div className="grid grid-cols-10 gap-1 p-2 bg-slate-950 rounded-xl border border-slate-800 shadow-inner">
+                <div className="grid grid-cols-10 gap-1 p-2 bg-[#07080c] rounded-xl border border-white/[0.08]">
                   {featureMap.map((row, r) =>
                     row.map((val, c) => (
                       <div
                         key={`fm-${r}-${c}`}
-                        className="w-5 h-5 sm:w-6 sm:h-6 rounded transition-all"
+                        className="w-5 h-5 rounded transition-all"
                         style={{
-                          backgroundColor: val > 0.05 ? `rgba(236, 72, 153, ${Math.min(1, val * 1.5)})` : '#0f172a'
+                          backgroundColor: val > 0.05 ? `rgba(255, 255, 255, ${Math.min(1, val * 1.3)})` : '#12141c'
                         }}
-                        title={`Attivazione: ${val.toFixed(2)}`}
                       />
                     ))
                   )}

@@ -4,21 +4,15 @@ import {
   Copy, 
   Check, 
   Download, 
-  Award, 
-  Sparkles, 
-  CheckCircle2, 
   Share2, 
-  Layers, 
   Users, 
-  Code2, 
-  Cpu
+  Code2
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 export default function DevpostPitch() {
   const [copiedSection, setCopiedSection] = useState(null);
   const [teamName, setTeamName] = useState('Team Minerva');
-  const [teamMembers, setTeamMembers] = useState('Marek (AI Engineer & Lead Architect)');
+  const [teamMembers, setTeamMembers] = useState('Marek (Lead AI Engineer & Accessibility Architect)');
 
   const submissionData = {
     title: 'Minerva — Multimodal AI Education & Neurodiversity Empowerment Companion',
@@ -37,7 +31,7 @@ Rather than passive lectures, Minerva transforms complex AI foundations (Neural 
     keyFeatures: [
       {
         title: 'Cognitive Diversity & Sensory Pacing Engine',
-        desc: 'Built-in support for Lexend/OpenDyslexic typography, Bionic Reading eye guidance, ADHD Clutter-Reduction Focus Mode, High Contrast (WCAG AAA), and calm color schemes.'
+        desc: 'Native support for Lexend/OpenDyslexic typography, Bionic Reading eye guidance, ADHD Clutter-Reduction Focus Mode, High Contrast (WCAG AAA), and calm color schemes.'
       },
       {
         title: 'Socratic Multimodal AI Tutor',
@@ -53,16 +47,15 @@ Rather than passive lectures, Minerva transforms complex AI foundations (Neural 
       },
       {
         title: 'Gamified Dopamine Reinforcement',
-        desc: 'Celebratory milestone feedback and micro-checklists that bust ADHD executive paralysis and sustain intrinsic motivation.'
+        desc: 'Milestone checklists and feedback designed to bust ADHD executive paralysis and sustain intrinsic motivation.'
       }
     ],
 
     technologiesUsed: [
       'React 19 & Vite 8: High-performance, responsive clientside architecture',
-      'Tailwind CSS v4: Responsive design tokens, accessible color scales, and glassmorphism UI',
+      'Tailwind CSS v4: Responsive design tokens, accessible color scales, and refined UI',
       'HTML5 Canvas API: Real-time 2D coordinate plane and neural decision boundary rendering',
       'Web Speech API (SpeechSynthesis): Native text-to-speech with neurodiversity-calibrated cadence',
-      'Canvas Confetti: Gamified milestone micro-rewards',
       'PyTorch, Transformers, ONNX, Scikit-Learn: Algorithmic reference pipelines provided in Launchpad blueprints'
     ],
 
@@ -80,7 +73,6 @@ Rather than passive lectures, Minerva transforms complex AI foundations (Neural 
     navigator.clipboard.writeText(text);
     setCopiedSection(id);
     setTimeout(() => setCopiedSection(null), 2000);
-    confetti({ particleCount: 20, spread: 40, origin: { y: 0.8 } });
   };
 
   const generateFullMarkdown = () => {
@@ -127,150 +119,145 @@ ${submissionData.whatsNext}
     a.download = 'devpost-minerva-submission.md';
     a.click();
     URL.revokeObjectURL(url);
-    confetti({ particleCount: 40, spread: 60, origin: { y: 0.7 } });
   };
 
   return (
     <div className="space-y-6">
       
-      {/* Header Banner */}
-      <div className="glass-panel rounded-2xl p-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+      {/* Header & Controls */}
+      <div className="ui-panel p-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-3 pb-3 border-b border-white/[0.06]">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 mb-2">
-              <Award className="w-3.5 h-3.5" />
-              <span>Devpost Ready Pitch Submission</span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Scheda di Presentazione per i Giudici
+            <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider block">
+              Dossier Ufficiale di Candidatura
+            </span>
+            <h1 className="text-xl font-bold tracking-tight text-zinc-100 font-['Outfit']">
+              Devpost Pitch Submission
             </h1>
-            <p className="text-sm text-slate-300 mt-1 max-w-2xl">
-              Tutti i requisiti ufficiali del bando organizzati e pronti per la candidatura su Devpost. Copia l'intero testo o le singole sezioni con un clic.
-            </p>
           </div>
 
-          <div className="flex items-center gap-2 self-start md:self-center">
+          <div className="flex items-center gap-2 self-start md:self-auto">
             <button
               onClick={() => handleCopy(generateFullMarkdown(), 'all')}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-bold text-xs shadow-lg shadow-violet-600/30 transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs transition-colors cursor-pointer"
             >
-              {copiedSection === 'all' ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
-              <span>{copiedSection === 'all' ? 'Tutto Copiato!' : 'Copia Tutto per Devpost'}</span>
+              {copiedSection === 'all' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedSection === 'all' ? 'Tutto Copiato' : 'Copia Tutto (.md)'}</span>
             </button>
 
             <button
               onClick={handleDownloadMarkdown}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs border border-slate-700 transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-zinc-300 font-medium text-xs border border-white/[0.08] transition-colors cursor-pointer"
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-3.5 h-3.5" />
               <span>Scarica .md</span>
             </button>
           </div>
         </div>
 
-        {/* Team Customization Inputs */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-slate-800">
+        {/* Team Inputs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
           <div>
-            <label className="text-[11px] font-bold text-slate-400 block mb-1">Nome Team (opzionale):</label>
+            <label className="text-[11px] font-mono text-zinc-400 block mb-1">Nome Team:</label>
             <input
               type="text"
               value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
-              className="w-full bg-slate-900/70 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-violet-400"
+              className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-indigo-500 font-mono"
             />
           </div>
           <div>
-            <label className="text-[11px] font-bold text-slate-400 block mb-1">Membri del Team & Ruoli:</label>
+            <label className="text-[11px] font-mono text-zinc-400 block mb-1">Membri & Ruoli:</label>
             <input
               type="text"
               value={teamMembers}
               onChange={(e) => setTeamMembers(e.target.value)}
-              className="w-full bg-slate-900/70 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-violet-400"
+              className="w-full bg-zinc-950 border border-white/[0.08] rounded-lg px-3 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-indigo-500 font-mono"
             />
           </div>
         </div>
       </div>
 
-      {/* Structured Sections matching Devpost requirements */}
+      {/* Structured Sections */}
       <div className="space-y-4">
         
-        {/* Title & Tagline Card */}
-        <div className="glass-panel rounded-2xl p-6 relative">
+        {/* Title & Tagline */}
+        <div className="ui-panel p-5 relative">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-violet-400 uppercase tracking-wider">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-indigo-400">
               Project Title & Tagline
             </span>
             <button
               onClick={() => handleCopy(`${submissionData.title}\n${submissionData.tagline}`, 'title')}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-800/60 cursor-pointer"
+              className="p-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
             >
               {copiedSection === 'title' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
           </div>
-          <h2 className="text-lg font-bold text-white mb-1">
+          <h2 className="text-base font-bold text-zinc-100 mb-1">
             {submissionData.title}
           </h2>
-          <p className="text-xs text-slate-300 italic">
+          <p className="text-xs text-zinc-400 italic">
             "{submissionData.tagline}"
           </p>
         </div>
 
-        {/* Problem Statement Card */}
-        <div className="glass-panel rounded-2xl p-6 relative">
+        {/* Problem Statement */}
+        <div className="ui-panel p-5 relative">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-rose-400 uppercase tracking-wider">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">
               1. Problem Statement
             </span>
             <button
               onClick={() => handleCopy(submissionData.problemStatement, 'problem')}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-800/60 cursor-pointer"
+              className="p-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
             >
               {copiedSection === 'problem' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
           </div>
-          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-line">
+          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed whitespace-pre-line">
             {submissionData.problemStatement}
           </p>
         </div>
 
-        {/* Solution Overview Card */}
-        <div className="glass-panel rounded-2xl p-6 relative">
+        {/* Solution Overview */}
+        <div className="ui-panel p-5 relative">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400">
               2. Solution Overview
             </span>
             <button
               onClick={() => handleCopy(submissionData.solutionOverview, 'solution')}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-800/60 cursor-pointer"
+              className="p-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
             >
               {copiedSection === 'solution' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
           </div>
-          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-line">
+          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed whitespace-pre-line">
             {submissionData.solutionOverview}
           </p>
         </div>
 
-        {/* Key Features Card */}
-        <div className="glass-panel rounded-2xl p-6 relative">
+        {/* Key Features */}
+        <div className="ui-panel p-5 relative">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-sky-400">
               3. Key Features
             </span>
             <button
               onClick={() => handleCopy(submissionData.keyFeatures.map((f, i) => `${i + 1}. ${f.title}: ${f.desc}`).join('\n'), 'features')}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-800/60 cursor-pointer"
+              className="p-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
             >
               {copiedSection === 'features' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
             </button>
           </div>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-2 sm:grid-cols-2">
             {submissionData.keyFeatures.map((f, i) => (
-              <div key={i} className="p-3.5 bg-slate-900/60 border border-slate-800 rounded-xl">
-                <span className="text-xs font-bold text-white block mb-1">
-                  ✓ {f.title}
+              <div key={i} className="ui-panel-elevated p-3.5">
+                <span className="text-xs font-semibold text-zinc-200 block mb-1">
+                  {f.title}
                 </span>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-zinc-400 leading-relaxed">
                   {f.desc}
                 </p>
               </div>
@@ -280,46 +267,44 @@ ${submissionData.whatsNext}
 
         {/* Tech Stack & Target Users */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          
-          <div className="glass-panel rounded-2xl p-6">
+          <div className="ui-panel p-5">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">
+              <span className="text-[11px] font-mono uppercase tracking-wider text-amber-400">
                 4. Technologies Used
               </span>
               <button
                 onClick={() => handleCopy(submissionData.technologiesUsed.join('\n'), 'tech')}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-800/60 cursor-pointer"
+                className="p-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
               >
                 {copiedSection === 'tech' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
             </div>
-            <ul className="space-y-2 text-xs text-slate-300">
+            <ul className="space-y-1.5 text-xs text-zinc-300 font-mono">
               {submissionData.technologiesUsed.map((t, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <span className="text-amber-400 font-bold">•</span>
+                  <span className="text-zinc-500">•</span>
                   <span>{t}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="glass-panel rounded-2xl p-6">
+          <div className="ui-panel p-5">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-pink-400 uppercase tracking-wider">
-                5. Target Users
+              <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-300">
+                5. Target Beneficiaries
               </span>
               <button
                 onClick={() => handleCopy(submissionData.targetUsers, 'users')}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-800/60 cursor-pointer"
+                className="p-1 rounded bg-zinc-900 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-white/[0.06] cursor-pointer"
               >
                 {copiedSection === 'users' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
             </div>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed whitespace-pre-line">
+            <p className="text-xs text-zinc-300 leading-relaxed whitespace-pre-line">
               {submissionData.targetUsers}
             </p>
           </div>
-
         </div>
 
       </div>
